@@ -1,8 +1,8 @@
 export default {
     providers: [
       {
-        domain: "https://intimate-hermit-97.clerk.accounts.dev",
-        applicationID: "alinotion-convex",
+        domain: "https://tough-bream-53.clerk.accounts.dev",
+        applicationID: "convex",
       },
     ]
   };
