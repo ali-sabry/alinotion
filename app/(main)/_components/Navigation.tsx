@@ -1,10 +1,21 @@
-import { ChevronsLeft, MenuIcon } from "lucide-react";
+import {
+  ChevronsLeft,
+  MenuIcon,
+  PlusCircle,
+  Search,
+  Settings,
+} from "lucide-react";
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import UserItem from "./UserItem";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
+import Item from "./Item";
+import { toast } from "sonner";
+import DocumentList from "./DocumentList";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -16,16 +27,18 @@ const Navigation = () => {
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
-  useEffect(()=> {
-    if(isMobile) collapse();
+  const create = useMutation(api.documents.create);
+
+  useEffect(() => {
+    if (isMobile) collapse();
     else resetWidth();
   }, [isMobile]);
 
-  useEffect(()=> {
-    if(isMobile) collapse();
+  useEffect(() => {
+    if (isMobile) collapse();
   }, [pathname, isMobile]);
 
-  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>)=> {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -35,46 +48,48 @@ const Navigation = () => {
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if(!isResizingRef.current) return;
+    if (!isResizingRef.current) return;
 
     let newWidth = e.clientX;
 
-    if(newWidth < 240) newWidth = 240;
-    if(newWidth > 480) newWidth = 480;
+    if (newWidth < 240) newWidth = 240;
+    if (newWidth > 480) newWidth = 480;
 
-    if(sidebarRef.current && navbarRef.current) {
+    if (sidebarRef.current && navbarRef.current) {
       sidebarRef.current.style.width = `${newWidth}px`;
       navbarRef.current.style.setProperty("left", `${newWidth}px`);
-      navbarRef.current.style.setProperty("width", `calc(100% - ${newWidth})px`);
-    };
+      navbarRef.current.style.setProperty(
+        "width",
+        `calc(100% - ${newWidth})px`
+      );
+    }
   };
 
-  const handleMouseUp = ()=> {
+  const handleMouseUp = () => {
     isResizingRef.current = false;
     document.removeEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
   };
 
   const resetWidth = () => {
-    if(sidebarRef.current && navbarRef.current) {
+    if (sidebarRef.current && navbarRef.current) {
       setIsCollapsed(false);
       setIsResetting(true);
 
-      sidebarRef.current.style.width = isMobile?"100%" :"240px";
+      sidebarRef.current.style.width = isMobile ? "100%" : "240px";
       navbarRef.current.style.setProperty(
-      "width",
-      isMobile ? "0" : "calc(100% - 240px)")
+        "width",
+        isMobile ? "0" : "calc(100% - 240px)"
+      );
 
-      navbarRef.current.style.setProperty(
-      "left", 
-      isMobile ? "100%" : "240px")
+      navbarRef.current.style.setProperty("left", isMobile ? "100%" : "240px");
 
-      setTimeout(()=> setIsResetting(false), 300);
-    };
+      setTimeout(() => setIsResetting(false), 300);
+    }
   };
 
-  const collapse = ()=> {
-    if(sidebarRef.current && navbarRef.current) {
+  const collapse = () => {
+    if (sidebarRef.current && navbarRef.current) {
       setIsCollapsed(true);
       setIsResetting(true);
 
@@ -82,8 +97,18 @@ const Navigation = () => {
 
       navbarRef.current.style.setProperty("width", "100%");
       navbarRef.current.style.setProperty("left", "0");
-      setTimeout(()=> setIsResetting(false), 300);
-    };
+      setTimeout(() => setIsResetting(false), 300);
+    }
+  };
+
+  const handleCreate = () => {
+    const promise = create({ title: "Untitled" });
+
+    toast.promise(promise, {
+      loading: "Creating a new note...",
+      success: "New note created! 🎉",
+      error: "Failed to create a new note.",
+    });
   };
 
   return (
@@ -108,14 +133,17 @@ const Navigation = () => {
         </div>
         <div>
           <UserItem />
+          <Item label="Search" icon={Search} isSearch onClick={() => {}} />
+          <Item label="Settings" icon={Settings} onClick={() => {}} />
+          <Item onClick={handleCreate} label="New Page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          <p>documents</p>
+          {/* <DocumentList /> */}
         </div>
-        <div 
-        onMouseDown={handleMouseDown}
-        onClick={resetWidth}
-        className="bg-primary/10 opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize h-full w-1 absolute top-0 right-0" 
+        <div
+          onMouseDown={handleMouseDown}
+          onClick={resetWidth}
+          className="bg-primary/10 opacity-0 group-hover/sidebar:opacity-100 transition cursor-ew-resize h-full w-1 absolute top-0 right-0"
         />
       </aside>
       <div

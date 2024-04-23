@@ -9,7 +9,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useConvexAuth();
 
   if (isLoading) {
-    <div className="w-full h-full flex items-center justify-center">
+    return <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-[99999]">
       <Spinner size="lg" />
     </div>;
   }
