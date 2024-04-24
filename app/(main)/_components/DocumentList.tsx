@@ -10,12 +10,12 @@ import { cn } from "@/lib/utils";
 import { FileIcon } from "lucide-react";
 
 interface DocumentListProps {
-  parentDocumentId: Id<"documents">;
+  parentDocumentId?: Id<"documents">;
   level?: number;
   data?: Doc<"documents">[];
 }
 
-const DocumentList = ({ parentDocumentId, level }: DocumentListProps) => {
+const DocumentList = ({ parentDocumentId, level = 0 }: DocumentListProps) => {
   const params = useParams();
   const router = useRouter();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
@@ -77,7 +77,7 @@ const DocumentList = ({ parentDocumentId, level }: DocumentListProps) => {
              {expanded[document._id] && (
                 <DocumentList 
                     parentDocumentId={document._id}
-                    level={level && level + 1}
+                    level={level + 1}
                 />
              )}
         </div>
