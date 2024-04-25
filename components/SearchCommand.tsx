@@ -41,7 +41,7 @@ const SearchCommand = () => {
     };
 
     document.addEventListener("keydown", down);
-    return ()=> document.removeEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
   }, [toggle]);
 
   const onSelect = (id: string) => {
@@ -58,19 +58,23 @@ const SearchCommand = () => {
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="documents">
           {documents?.map((document) => (
-            <CommandItem
-              key={document._id}
-              value={`${document._id}-${document.title}`}
-              title={document.title}
-              onSelect={onSelect}
-            >
-              {document.icon ? (
-                <p className="mr-2 text-[18px]">{document.icon}</p>
-              ) : (
-                <File className="mr-2 w-4 h-4" />
-              )}
-              <span>{document.title}</span>
-            </CommandItem>
+              <CommandItem
+                key={document._id}
+                value={`${document._id}-${document.title}`}
+                title={document.title}
+                onSelect={onSelect}
+                onMouseOver={() => console.log(document._id)}
+                onClick={() => console.log(document._id)}
+                className="pointer-cursor pointer-events-auto data-[disabled]:pointer-events-auto data-[disabled]:cursor-pointer"
+              >
+                {document.icon ? (
+                  <p className="mr-2 text-[18px]">{document.icon}</p>
+                ) : (
+                  <File className="mr-2 w-4 h-4" />
+                )}
+                <span>{document.title}</span>
+              </CommandItem>
+              
           ))}
         </CommandGroup>
       </CommandList>
