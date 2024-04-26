@@ -2,7 +2,14 @@
 
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { ChevronDown, ChevronRight, LucideIcon, MoreHorizontal, Plus, Trash } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  LucideIcon,
+  MoreHorizontal,
+  Plus,
+  Trash,
+} from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
@@ -55,9 +62,9 @@ const Item = ({
     onExpand?.();
   };
 
-  const onArchive = (e: React.MouseEvent<HTMLDivElement, MouseEvent>)=> {
+  const onArchive = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
-    if(!id) return;
+    if (!id) return;
 
     const promise = archive({ id });
     toast.promise(promise, {
@@ -78,7 +85,7 @@ const Item = ({
           onExpand?.();
         }
 
-        // router.push(`/documents/${documentId}`);
+        router.push(`/documents/${documentId}`);
       }
     );
 
@@ -102,7 +109,7 @@ const Item = ({
       {!!id && (
         <div
           role="button"
-          className="h-full mr-1 rounded-sm hover:bg-neutral-300 dark:bg-neutral-600"
+          className="h-full mr-1 rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
           onClick={handleExpand}
         >
           <ChevronIcon className="w-4 h-4 shrink-0 text-muted-foreground/50" />
@@ -124,9 +131,7 @@ const Item = ({
       {!!id && (
         <div className="ml-auto flex items-center gap-x-2">
           <DropdownMenu>
-            <DropdownMenuTrigger 
-            onClick={(e) => e.stopPropagation()}
-            asChild>
+            <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
               <div
                 role="button"
                 className="opacity-0 h-full ml-auto rounded-sm group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
