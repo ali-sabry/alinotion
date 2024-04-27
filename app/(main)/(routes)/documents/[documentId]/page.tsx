@@ -29,7 +29,6 @@ const DocumentId = ({ params }: DocumentIdProps) => {
       <div className="h-[35vh]" />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
         <Toolbar initalData={document} />
-        hello, from document id page
       </div>
     </div>
   );

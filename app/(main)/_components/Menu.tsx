@@ -49,7 +49,7 @@ const Menu = ({ documentId }: { documentId: Id<"documents"> }) => {
         alignOffset={8}
         forceMount
       >
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={onArchive}>
           <Trash className="mr-2 w-4 h-4" />
           Delete
         </DropdownMenuItem>
