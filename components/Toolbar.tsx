@@ -10,6 +10,7 @@ import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 
 import TextareaAutoSize from "react-textarea-autosize";
+import { useCoverImage } from "@/hooks/use-cover-image";
 
 interface ToolbarProps {
   initalData: Doc<"documents">;
@@ -22,6 +23,8 @@ const Toolbar = ({ initalData, preview }: ToolbarProps) => {
   const [value, setValue] = useState(initalData.title);
 
   const update = useMutation(api.documents.update);
+  const removeIcon = useMutation(api.documents.removeIcon);
+  const coverImage = useCoverImage();
 
   const enableInput = () => {
     if (preview) return;
@@ -51,11 +54,24 @@ const Toolbar = ({ initalData, preview }: ToolbarProps) => {
     }
   };
 
+  const onIconSelect = (icon: string)=> {
+    update({
+      id: initalData._id,
+      icon,
+    })
+  };
+
+  const onRemoveIcon = ()=> {
+    removeIcon({
+      id: initalData._id
+    })
+  }
+
   return (
     <div className="pl-[54px] group relative">
       {!!initalData.icon && !preview && (
         <div className="flex items-center gap-x-2 group/icon p-t-6">
-          <IconPicker onChange={() => {}}>
+          <IconPicker onChange={onIconSelect}>
             <p className="text-6xl hover:opacity-75 transition">
               {initalData.icon}
             </p>
@@ -63,7 +79,7 @@ const Toolbar = ({ initalData, preview }: ToolbarProps) => {
           <Button
             className="rounded-full opacity-0 group-hover/icon:opacity-100 text-muted-foreground transition text-xs"
             variant="outline"
-            onClick={() => {}}
+            onClick={onRemoveIcon}
           >
             <X className="w-4 h-4" />
           </Button>
@@ -75,7 +91,7 @@ const Toolbar = ({ initalData, preview }: ToolbarProps) => {
       )}
       <div className="opacity-0 group-hover:opacity-100 flex items-center gap-x-1 py-4">
         {!initalData.icon && !preview && (
-          <IconPicker asChild onChange={() => {}}>
+          <IconPicker asChild onChange={onIconSelect}>
             <Button
               className="text-muted-foreground text-xs"
               variant="outline"
@@ -91,7 +107,7 @@ const Toolbar = ({ initalData, preview }: ToolbarProps) => {
             className="text-muted-foreground text-xs"
             variant="outline"
             size="sm"
-            onClick={() => {}}
+            onClick={coverImage.onOpen}
           >
             <ImageIcon className="w-4 h-4 mr-2" />
             Add cover
@@ -110,7 +126,7 @@ const Toolbar = ({ initalData, preview }: ToolbarProps) => {
       ) : (
         <div
         onClick={enableInput}
-        className="pb-[11.5px] text-5xl font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF] "
+        className="pb-[11.5px] text-5xl font-bold break-words outline-none text-[#3F3F3F] dark:text-[#CFCFCF]"
         >
           {initalData.title}
         </div>
