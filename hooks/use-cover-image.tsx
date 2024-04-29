@@ -1,13 +1,18 @@
+import { undefined } from "zod";
 import { create } from "zustand";
 
 type CoverImageStore = {
-    isOpen: boolean;
-    onOpen: ()=> void;
-    onClose: ()=> void;
+  url?: string;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  onReplace: (url: string) => void;
 };
 
-export const useCoverImage = create<CoverImageStore>(set => ({
-    isOpen: false,
-    onOpen: ()=> set({isOpen: true}),
-    onClose: ()=> set({isOpen: false})
-}))
+export const useCoverImage = create<CoverImageStore>((set) => ({
+  url: "",
+  isOpen: false,
+  onOpen: () => set({ isOpen: true, url: "" }),
+  onClose: () => set({ isOpen: false, url: "" }),
+  onReplace: (url: string) => set({ isOpen: true, url }),
+}));
