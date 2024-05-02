@@ -1,35 +1,46 @@
 "use client";
 
-import { Doc } from "@/convex/_generated/dataModel";
+import { BlockNoteView, useCreateBlockNote } from "@blocknote/react";
 
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { BlockNoteView, useBlockNote, useBlockNoteEditor } from "@blocknote/react";
 import { useTheme } from "next-themes";
+import "@blocknote/react/style.css";
+import { PartialBlock, BlockNoteEditor } from "@blocknote/core";
+import { useEdgeStore } from "@/lib/edgestore";
 
 interface EditorProps {
-    onChange: ()=> void;
-    initalContent?: string;
-    editable?: boolean
+  onChange: (value: string) => void;
+  initalContent?: string;
+  editable?: boolean;
 }
 
-const Editor = ({onChange, initalContent, editable}: EditorProps)=> {
-    // const editor: BlockNoteEditor = useBlockNoteEditor({
-    //     editable,
-    //     initalContent: initalContent ? JSON.parse(initalContent) as PartialBlock[] : undefined,
-    //     onEditorContentChange: (editor)=> {
-    //         onChange(JSON.parse(editor.topLevelBlock))
-    //     },
-    // })
-    
-    const { resolvedTheme } = useTheme();
+const Editor = ({ onChange, initalContent, editable }: EditorProps) => {
+  const { resolvedTheme } = useTheme();
+  const { edgestore } = useEdgeStore();
 
-    const editor = useBlockNoteEditor();
+  const handleUpload = async (file: File) => {
+    const response = await edgestore.publicFiles.upload({
+      file,
+    });
 
-    return <BlockNoteView 
-        editor={editor}
-        theme={resolvedTheme === "dark" ? "dark" : "light"}
-        
+    return response.url;
+  };
+
+  const editor = useCreateBlockNote({
+    initialContent: initalContent
+      ? (JSON.parse(initalContent) as PartialBlock[])
+      : undefined,
+    uploadFile: handleUpload,
+  });
+
+  editor.onEditorContentChange(() => onChange(JSON.stringify(editor.document)));
+
+  return (
+    <BlockNoteView
+      editor={editor}
+      theme={resolvedTheme === "dark" ? "dark" : "light"}
+      onChange={() => console.log}
     />
+  );
 };
 
 export default Editor;
