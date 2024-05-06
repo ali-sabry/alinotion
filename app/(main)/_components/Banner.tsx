@@ -22,7 +22,7 @@ const Banner = ({ documentId }: { documentId: Id<"documents"> }) => {
       error: "Failed to delete note.",
     });
 
-    router.push("/documents");
+    router.back();
   };
 
   const onRestore = () => {

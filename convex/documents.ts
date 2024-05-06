@@ -222,11 +222,11 @@ export const getById = query({
     const identity = await ctx.auth.getUserIdentity();
     const document = await ctx.db.get(args.documentId);
 
-    if (!identity) throw new Error("Not authenticated.");
+    if (!identity && !document?.isPublished) throw new Error("Not authenticated.");
     if (!document) throw new Error("Not found.");
     if (document.isPublished && !document.isArchived) return document;
 
-    const userId = identity.subject;
+    const userId = identity?.subject;
 
     if (document.userId !== userId) throw new Error("Not Authorized.");
 
@@ -241,7 +241,7 @@ export const update = mutation({
     content: v.optional(v.string()),
     coverImage: v.optional(v.string()),
     icon: v.optional(v.string()),
-    ispublished: v.optional(v.string()),
+    isPublished: v.optional(v.boolean()),
   },
   async handler(ctx, args) {
     const identity = await ctx.auth.getUserIdentity();

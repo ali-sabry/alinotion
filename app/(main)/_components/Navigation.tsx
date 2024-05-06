@@ -11,7 +11,7 @@ import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 
 import { cn } from "@/lib/utils";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import UserItem from "./UserItem";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -29,6 +29,7 @@ import useSettings from "@/hooks/use-settings";
 import Navbar from "./Navbar";
 
 const Navigation = () => {
+  const router = useRouter();
   const openSearch = useSearch((store) => store.onOpen);
   const openSettings = useSettings((store) => store.onOpen);
 
@@ -116,7 +117,9 @@ const Navigation = () => {
   };
 
   const handleCreate = () => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) =>
+      router.push(`/documents/${documentId}`)
+    );
 
     toast.promise(promise, {
       loading: "Creating a new note...",

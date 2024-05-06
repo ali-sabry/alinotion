@@ -1,5 +1,6 @@
 "use client";
 
+import { Spinner } from "@/app/(marketing)/_components/Spinner";
 import Cover from "@/components/Cover";
 import Toolbar from "@/components/Toolbar";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,7 +21,6 @@ const DocumentId = ({ params }: DocumentIdProps) => {
     () => dynamic(() => import("@/components/Editor"), { ssr: false }),
     []
   );
-  
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId,
   });
@@ -56,10 +56,14 @@ const DocumentId = ({ params }: DocumentIdProps) => {
 
   return (
     <div className="pb-40">
-      <Cover url={document.coverImage} />
+      <Cover preview url={document.coverImage} />
       <div className="md:max-w-3xl lg:max-w-4xl mx-auto">
-        <Toolbar initalData={document} />
-        <Editor initalContent={document.content} onChange={onChange} />
+        <Toolbar preview initalData={document} />
+        <Editor
+          editable={false}
+          initalContent={document.content}
+          onChange={onChange}
+        />
       </div>
     </div>
   );
