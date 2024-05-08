@@ -26,6 +26,50 @@ export const metadata: Metadata = {
       },
     ],
   },
+  authors: [{ name: "Ali Sabry"}],
+  twitter: {
+    title: "Ali Notion Clone",
+    card: "summary_large_image",
+    images: [
+      {
+        url: "/alinotion-preview.png",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    creator: "Ali Sabry",
+    creatorId: "@realalisabry",
+    description: "A fully Notion app clone with the all main features.",
+    site: "https://alinotion.vercel.app",
+  },
+  openGraph: {
+    title: "Ali Notion Clone",
+  },
+  appleWebApp: {
+    title: "Ali Notion Clone",
+    statusBarStyle: "black",
+    startupImage: "/alinotion-preview.png",
+    capable: true,
+  },
+  category: "Productivity App",
+  themeColor: "#000000",
+  alternates: {
+    canonical: "https://alinotion.vercel.app",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  publisher: "Ali Sabry",
+  referrer: "origin-when-cross-origin",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  other: {
+    publish_date: "2024 - May",
+  }
 };
 
 export default function RootLayout({
