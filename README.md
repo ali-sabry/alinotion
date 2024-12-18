@@ -1,4 +1,4 @@
-# Notion Clone
+# AliNotion
 
 ![Preview Image](public/notion.png)
 
